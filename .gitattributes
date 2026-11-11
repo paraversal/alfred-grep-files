@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+*.alfredworkflow binary
+
+# Binary assets
+*.png binary

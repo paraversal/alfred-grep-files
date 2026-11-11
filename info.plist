@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>dev.paraversal.alfred-grep-files</string>
+	<key>connections</key>
+	<dict>
+		<key>7C1F2E40-6B4A-4C7E-9D2B-3A5F8E1C0D21</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>B4D8A6E2-1F3C-4A7B-8E9D-2C6F0A5B7E43</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>paraversal</string>
+	<key>description</key>
+	<string>Fuzzy file and folder names plus ripgrep content matches under a configurable search root.</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Grep Files</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>action.sh</string>
+				<key>type</key>
+				<integer>8</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>B4D8A6E2-1F3C-4A7B-8E9D-2C6F0A5B7E43</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>{var:grep_keyword}</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Searching…</string>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>search.sh</string>
+				<key>subtext</key>
+				<string>Fuzzy filenames + in-file grep</string>
+				<key>title</key>
+				<string>Search files and contents</string>
+				<key>type</key>
+				<integer>8</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>7C1F2E40-6B4A-4C7E-9D2B-3A5F8E1C0D21</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string># Grep Files
+
+Fuzzy file and folder names plus ripgrep content matches under one root. Type your keyword (default `f`), then a query: Return opens, Option+Return reveals, Command+Return copies, Tab shows Alfred's file actions.
+
+## Configuration
+
+Everything below lives in this workflow's **Configure Workflow…** window. Defaults are declared in `info.plist`; Alfred stores changes in `prefs.plist`. The same field reference is shipped as `CONFIGURATION.md` in the workflow folder.
+
+- **Keyword** (`grep_keyword`, default `f`) — the one-word Alfred trigger. The Script Filter follows it, so save and use the new keyword.
+- **Search folder** (`search_root`, default `~`) — root to index and search recursively. `~` expands; hidden files are included and symlinks are not followed.
+- **Excluded folders** (`excludes_mode`, default `asimeow`) — skip dependency/build folders using `asimeow` config, `builtin` dev list, or `none` (baseline only). `.git`, `.svn`, `.hg`, and `.DS_Store` are always excluded.
+- **asimeow config path** (`asimeow_config`, default `~/.config/asimeow/config.yaml`) — YAML read in asimeow mode; missing/broken falls back to the built-in list.
+- **Extra excluded folders** (`extra_excludes`, default empty) — one entry per line (commas also work): a bare name (`build`), relative path (`Media/Audio Files`), dot suffix (`.logicproject`), or rg glob (`*.tmp`). Matched at any depth; leading `/` is ignored.
+- **File contents** (`content_enabled`, default on) — turn ripgrep content search on/off. Contents are deferred and always ranked below names.
+- **Maximum results** (`max_items`, default `30`, range 1-100) — total rows emitted; name hits always above content.
+- **Content hits per file** (`max_content_lines`, default `3`, range 1-10) — matching lines taken from one file.
+- **Folders** (`include_dirs`, default on) — include matching folders; Return reveals them in Finder.
+- **Editor command** (`editor_command`, default empty) — command for Enter on a content hit. Placeholders: `{path}`, `{line}`, `{col}`. Example: `code -g {path}:{line}:{col}`. Blank auto-detects `code`, `cursor`, `zed`, or `subl`, then `open`.
+- **Index refresh interval** (`index_ttl_seconds`, default `600`, range 0-86400) — seconds before a background rebuild; `0` rebuilds on every search.
+
+Settings apply on the next search. See `CONFIGURATION.md` for examples, plist details, precedence, and troubleshooting.
+</string>
+	<key>uidata</key>
+	<dict>
+		<key>7C1F2E40-6B4A-4C7E-9D2B-3A5F8E1C0D21</key>
+		<dict>
+			<key>xpos</key>
+			<real>80.0</real>
+			<key>ypos</key>
+			<real>120.0</real>
+		</dict>
+		<key>B4D8A6E2-1F3C-4A7B-8E9D-2C6F0A5B7E43</key>
+		<dict>
+			<key>xpos</key>
+			<real>480.0</real>
+			<key>ypos</key>
+			<real>120.0</real>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>f</string>
+				<key>placeholder</key>
+				<string>f</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>One-word Alfred trigger. Default: f. The Script Filter keyword follows this value; save, then use the new keyword.</string>
+			<key>label</key>
+			<string>Keyword</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>grep_keyword</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>~</string>
+				<key>placeholder</key>
+				<string>~</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Root folder to index and search recursively. ~ expands to your home folder. Hidden files included; symlinks not followed. Default: ~.</string>
+			<key>label</key>
+			<string>Search folder</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>search_root</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>asimeow</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>asimeow config</string>
+						<string>asimeow</string>
+					</array>
+					<array>
+						<string>Built-in list</string>
+						<string>builtin</string>
+					</array>
+					<array>
+						<string>No exclusions</string>
+						<string>none</string>
+					</array>
+				</array>
+			</dict>
+			<key>description</key>
+			<string>How to skip dependency/build folders: asimeow config, the built-in dev list, or no extra exclusions. The .git/.svn/.hg/.DS_Store baseline always applies.</string>
+			<key>label</key>
+			<string>Excluded folders</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>excludes_mode</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>~/.config/asimeow/config.yaml</string>
+				<key>placeholder</key>
+				<string>~/.config/asimeow/config.yaml</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>YAML config read when Excluded folders is asimeow. ~ expands. A missing or unreadable config falls back to the built-in list.</string>
+			<key>label</key>
+			<string>asimeow config path</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>asimeow_config</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+				<key>verticalsize</key>
+				<integer>4</integer>
+			</dict>
+			<key>description</key>
+			<string>One entry per line (commas work too): bare name (build), relative path (Media/Audio Files), dot suffix (.logicproject), or rg glob. Matched at any depth. Changes rebuild the index.</string>
+			<key>label</key>
+			<string>Extra excluded folders</string>
+			<key>type</key>
+			<string>textarea</string>
+			<key>variable</key>
+			<string>extra_excludes</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Search inside files</string>
+			</dict>
+			<key>description</key>
+			<string>Search inside files with ripgrep. Names still appear first; contents arrive from a background scan. Off = filename/folder search only.</string>
+			<key>label</key>
+			<string>File contents</string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>content_enabled</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>30</string>
+				<key>placeholder</key>
+				<string>30</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Total rows emitted to Alfred (1-100). Name hits always rank above content. Default: 30.</string>
+			<key>label</key>
+			<string>Maximum results</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>max_items</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>3</string>
+				<key>placeholder</key>
+				<string>3</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Maximum matching lines shown per file (1-10). Default: 3.</string>
+			<key>label</key>
+			<string>Content hits per file</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>max_content_lines</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Include matching folders</string>
+			</dict>
+			<key>description</key>
+			<string>Include matching folders. Return reveals a folder in Finder. Empty folders cannot be indexed. Default: on.</string>
+			<key>label</key>
+			<string>Folders</string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>include_dirs</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>code -g {path}:{line}:{col}</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Command for Enter on a content hit. Placeholders: {path}, {line}, {col}. Example: code -g {path}:{line}:{col}. Blank = auto-detect code, cursor, zed, or subl; else open.</string>
+			<key>label</key>
+			<string>Editor command</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>editor_command</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>600</string>
+				<key>placeholder</key>
+				<string>600</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Seconds before the name index is refreshed in the background (0-86400; 0 = every search). The old index is served while rebuilding. Default: 600.</string>
+			<key>label</key>
+			<string>Index refresh interval</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>index_ttl_seconds</string>
+		</dict>
+	</array>
+	<key>variables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+	</dict>
+	<key>version</key>
+	<string>1.0</string>
+	<key>webaddress</key>
+	<string></string>
+</dict>
+</plist>

@@ -1,0 +1,12 @@
+# Built workflow archive (releases are produced by CI)
+alfred-grep-files.alfredworkflow
+
+# Alfred's local Configuration Builder values
+prefs.plist
+
+# Python
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store

@@ -1,0 +1,75 @@
+name: Build and release Alfred workflow
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build and attach the workflow to (e.g. v1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build .alfredworkflow and attach to release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the tag being released
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Check scripts and plist
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile search.py action.py
+          python3 -c 'import plistlib; plistlib.load(open("info.plist", "rb"))'
+          test -f CONFIGURATION.md
+          for script in search.sh action.sh build.sh; do
+            bash -n "$script"
+          done
+
+      - name: Build workflow archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x build.sh
+          ./build.sh
+          test -s alfred-grep-files.alfredworkflow
+          for asset in icon.png CONFIGURATION.md README.md; do
+            unzip -Z1 alfred-grep-files.alfredworkflow | grep -qx "$asset"
+          done
+
+      - name: Create release or upload asset
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${TAG:-}" ]]; then
+            echo "No tag supplied" >&2
+            exit 1
+          fi
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG exists; replacing the workflow asset"
+            gh release upload "$TAG" alfred-grep-files.alfredworkflow \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+          else
+            echo "Creating release $TAG"
+            gh release create "$TAG" alfred-grep-files.alfredworkflow \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$TAG" \
+              --generate-notes \
+              --verify-tag
+          fi
