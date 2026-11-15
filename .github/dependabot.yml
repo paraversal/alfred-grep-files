@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Keeps the SHA-pinned actions current: one grouped PR a month,
+  # and only versions that have been out for a week.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      all:
+        patterns: ['*']
+    cooldown:
+      default-days: 7

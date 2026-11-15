@@ -22,9 +22,10 @@ jobs:
 
     steps:
       - name: Check out the tag being released
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ inputs.tag || github.ref }}
+          persist-credentials: false
 
       - name: Check scripts and plist
         shell: bash
